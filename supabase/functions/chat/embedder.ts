@@ -18,7 +18,7 @@ export async function embedQuery(
     body: JSON.stringify({
       model: 'text-embedding-3-large',
       input: query,
-      dimensions: 3072,
+      dimensions: 1024,
     }),
   });
 
