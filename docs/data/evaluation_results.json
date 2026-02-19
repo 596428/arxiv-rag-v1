@@ -1,38 +1,38 @@
 {
-  "hybrid": {
-    "avg_mrr": 0.4518125,
-    "avg_ndcg@5": 0.4046383983845861,
-    "avg_ndcg@10": 0.5036499442420379,
-    "avg_precision@5": 0.3104,
-    "avg_precision@10": 0.27155,
-    "avg_search_time_ms": 2271.154550075531,
-    "num_queries": 2000
-  },
   "dense": {
-    "avg_mrr": 0.3085593253968254,
-    "avg_ndcg@5": 0.2927265570469268,
-    "avg_ndcg@10": 0.3090470769253696,
-    "avg_precision@5": 0.15209999999999999,
-    "avg_precision@10": 0.097,
-    "avg_search_time_ms": 174.72477388381958,
-    "num_queries": 2000
+    "avg_mrr": 0.4327106528670744,
+    "avg_ndcg@5": 0.40962232510663893,
+    "avg_ndcg@10": 0.43444253361709145,
+    "avg_precision@5": 0.21657519209659715,
+    "avg_precision@10": 0.13973655323819978,
+    "avg_search_time_ms": 439.74839410980763,
+    "num_queries": 1822
   },
   "sparse": {
-    "avg_mrr": 0.6492823412698413,
-    "avg_ndcg@5": 0.6088922065971173,
-    "avg_ndcg@10": 0.6397006640272972,
-    "avg_precision@5": 0.4474,
-    "avg_precision@10": 0.3533,
-    "avg_search_time_ms": 1751.4616396427155,
-    "num_queries": 2000
+    "avg_mrr": 0.7723245866220619,
+    "avg_ndcg@5": 0.7208992163692513,
+    "avg_ndcg@10": 0.7621531849919069,
+    "avg_precision@5": 0.5480790340285401,
+    "avg_precision@10": 0.43644346871569706,
+    "avg_search_time_ms": 2599.2503896371986,
+    "num_queries": 1822
+  },
+  "hybrid": {
+    "avg_mrr": 0.6137606066941961,
+    "avg_ndcg@5": 0.5484564786596348,
+    "avg_ndcg@10": 0.6814814432148377,
+    "avg_precision@5": 0.4244785949506037,
+    "avg_precision@10": 0.3697036223929748,
+    "avg_search_time_ms": 3577.633181597085,
+    "num_queries": 1822
   },
   "openai": {
-    "avg_mrr": 0.0,
-    "avg_ndcg@5": 0.0,
-    "avg_ndcg@10": 0.0,
-    "avg_precision@5": 0.0,
-    "avg_precision@10": 0.0,
-    "avg_search_time_ms": 3287.993624687195,
-    "num_queries": 2000
+    "avg_mrr": 0.7570729444357326,
+    "avg_ndcg@5": 0.7242680311711946,
+    "avg_ndcg@10": 0.7563961584713772,
+    "avg_precision@5": 0.5334796926454446,
+    "avg_precision@10": 0.4126234906695938,
+    "avg_search_time_ms": 224.98730430226163,
+    "num_queries": 1822
   }
 }
