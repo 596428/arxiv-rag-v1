@@ -261,43 +261,55 @@ function renderResultsTable() {
 // Key findings analysis
 function renderFindings() {
     const models = Object.keys(evaluationData);
-    const openai = evaluationData.openai;
-    const dense = evaluationData.dense;
-    const hybrid = evaluationData.hybrid;
-
     let findings = [];
 
-    // Compare OpenAI vs BGE
-    if (openai && dense) {
-        const mrrImprovement = ((openai.avg_mrr - dense.avg_mrr) / dense.avg_mrr * 100).toFixed(1);
-        const ndcgImprovement = ((openai['avg_ndcg@10'] - dense['avg_ndcg@10']) / dense['avg_ndcg@10'] * 100).toFixed(1);
+    // Sort models by MRR (descending)
+    const sortedByMRR = models
+        .map(m => ({ model: m, mrr: evaluationData[m].avg_mrr, data: evaluationData[m] }))
+        .sort((a, b) => b.mrr - a.mrr);
 
-        findings.push(`<li><strong>OpenAI vs BGE-M3 Dense:</strong> OpenAI shows ${mrrImprovement}% improvement in MRR and ${ndcgImprovement}% improvement in NDCG@10.</li>`);
+    // Sort models by latency (ascending)
+    const sortedByLatency = models
+        .map(m => ({ model: m, latency: evaluationData[m].avg_search_time_ms, data: evaluationData[m] }))
+        .sort((a, b) => a.latency - b.latency);
+
+    const best = sortedByMRR[0];
+    const second = sortedByMRR[1];
+    const fastest = sortedByLatency[0];
+    const slowest = sortedByLatency[sortedByLatency.length - 1];
+
+    // 1. Best accuracy model
+    findings.push(`<li><strong>Best Accuracy:</strong> ${MODEL_LABELS[best.model]} achieves the highest MRR (${best.mrr.toFixed(3)}) and NDCG@10 (${best.data['avg_ndcg@10'].toFixed(3)}).</li>`);
+
+    // 2. Runner-up comparison
+    if (second) {
+        const mrrGap = ((best.mrr - second.mrr) / second.mrr * 100).toFixed(1);
+        findings.push(`<li><strong>Runner-up:</strong> ${MODEL_LABELS[second.model]} (MRR ${second.mrr.toFixed(3)}) is ${mrrGap}% behind in accuracy.</li>`);
     }
 
-    // Latency comparison
-    if (openai && dense) {
-        const latencyRatio = (dense.avg_search_time_ms / openai.avg_search_time_ms).toFixed(1);
-        if (openai.avg_search_time_ms < dense.avg_search_time_ms) {
-            findings.push(`<li><strong>Latency:</strong> OpenAI embedding search is ${latencyRatio}x faster than BGE-M3 dense search.</li>`);
-        }
+    // 3. Speed champion
+    const speedRatio = (slowest.latency / fastest.latency).toFixed(1);
+    findings.push(`<li><strong>Fastest:</strong> ${MODEL_LABELS[fastest.model]} (${Math.round(fastest.latency)}ms) is ${speedRatio}x faster than ${MODEL_LABELS[slowest.model]} (${Math.round(slowest.latency)}ms).</li>`);
+
+    // 4. Speed vs Accuracy trade-off (if best accuracy != fastest)
+    if (best.model !== fastest.model) {
+        const bestLatency = best.data.avg_search_time_ms;
+        const fastestMRR = fastest.data.avg_mrr;
+        const latencyPenalty = (bestLatency / fastest.latency).toFixed(1);
+        const accuracyGain = ((best.mrr - fastestMRR) / fastestMRR * 100).toFixed(1);
+        findings.push(`<li><strong>Trade-off:</strong> ${MODEL_LABELS[best.model]} offers ${accuracyGain}% better accuracy but is ${latencyPenalty}x slower than ${MODEL_LABELS[fastest.model]}.</li>`);
     }
 
-    // Hybrid vs Dense
-    if (hybrid && dense) {
-        if (hybrid.avg_mrr > dense.avg_mrr) {
-            findings.push(`<li><strong>Hybrid Search:</strong> Combining dense and sparse retrieval (RRF) improves results over dense-only search.</li>`);
-        } else {
-            findings.push(`<li><strong>Hybrid Search:</strong> Hybrid search shows similar performance to dense-only search on this benchmark.</li>`);
-        }
+    // 5. Production recommendation
+    const prodCandidate = sortedByMRR.find(m =>
+        m.data.avg_search_time_ms < 500 && m.mrr > 0.7
+    ) || fastest;
+
+    if (prodCandidate.model === best.model) {
+        findings.push(`<li><strong>Recommendation:</strong> ${MODEL_LABELS[best.model]} is optimal for production (best accuracy with acceptable latency).</li>`);
+    } else {
+        findings.push(`<li><strong>Recommendation:</strong> For production, consider ${MODEL_LABELS[prodCandidate.model]} (MRR ${prodCandidate.mrr.toFixed(3)}, ${Math.round(prodCandidate.data.avg_search_time_ms)}ms) for the best speed/accuracy balance.</li>`);
     }
-
-    // Best model recommendation
-    const bestModel = models.reduce((best, model) =>
-        (evaluationData[model].avg_mrr > evaluationData[best].avg_mrr) ? model : best
-    , models[0]);
-
-    findings.push(`<li><strong>Recommendation:</strong> ${MODEL_LABELS[bestModel]} provides the best retrieval quality on this benchmark.</li>`);
 
     document.getElementById('findings').innerHTML = `<ul class="list-disc list-inside space-y-2">${findings.join('')}</ul>`;
 }
