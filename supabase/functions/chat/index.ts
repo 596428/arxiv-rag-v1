@@ -12,9 +12,9 @@ const RATE_LIMIT_MAX_REQUESTS = 10; // 10 requests per minute per IP
 const MAX_QUERY_LENGTH = 500; // Max query length in characters
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-// CORS headers - restrict to known origins in production
+// CORS headers - restricted to GitHub Pages domain
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // TODO: restrict to github.io domain
+  'Access-Control-Allow-Origin': 'https://596428.github.io',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
