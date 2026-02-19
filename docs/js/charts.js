@@ -1,5 +1,9 @@
 // arXiv RAG v1 - Evaluation Dashboard Charts
 
+// Chart.js Dark Mode Configuration
+Chart.defaults.color = '#e2e8f0';           // slate-200 for text
+Chart.defaults.borderColor = '#475569';     // slate-600 for borders
+
 const MODEL_COLORS = {
     'hybrid': 'rgba(59, 130, 246, 0.8)',   // blue
     'dense': 'rgba(16, 185, 129, 0.8)',    // green
@@ -99,16 +103,24 @@ function renderMetricsChart() {
             plugins: {
                 legend: {
                     position: 'bottom',
+                    labels: { color: '#e2e8f0' },
                 },
             },
             scales: {
                 y: {
                     beginAtZero: true,
                     max: 1,
+                    grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                    ticks: { color: '#94a3b8' },
                     title: {
                         display: true,
                         text: 'Score',
+                        color: '#e2e8f0',
                     },
+                },
+                x: {
+                    grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                    ticks: { color: '#94a3b8' },
                 },
             },
         },
@@ -143,12 +155,26 @@ function renderRadarChart() {
             plugins: {
                 legend: {
                     position: 'bottom',
+                    labels: { color: '#e2e8f0' },
                 },
             },
             scales: {
                 r: {
                     beginAtZero: true,
                     max: 1,
+                    grid: {
+                        color: 'rgba(148, 163, 184, 0.3)',
+                    },
+                    angleLines: {
+                        color: 'rgba(148, 163, 184, 0.3)',
+                    },
+                    pointLabels: {
+                        color: '#e2e8f0',
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        backdropColor: 'transparent',
+                    },
                 },
             },
         },
@@ -183,10 +209,17 @@ function renderLatencyChart() {
             scales: {
                 x: {
                     beginAtZero: true,
+                    grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                    ticks: { color: '#94a3b8' },
                     title: {
                         display: true,
                         text: 'Latency (ms)',
+                        color: '#e2e8f0',
                     },
+                },
+                y: {
+                    grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                    ticks: { color: '#94a3b8' },
                 },
             },
         },
@@ -201,19 +234,19 @@ function renderResultsTable() {
     tbody.innerHTML = models.map(model => {
         const data = evaluationData[model];
         const isOpenAI = model === 'openai';
-        const rowClass = isOpenAI ? 'bg-purple-50' : '';
+        const rowClass = isOpenAI ? 'bg-purple-900/30' : '';
 
         return `
             <tr class="${rowClass}">
-                <td class="px-6 py-4 whitespace-nowrap font-medium ${isOpenAI ? 'text-purple-700' : 'text-gray-900'}">
+                <td class="px-6 py-4 whitespace-nowrap font-medium ${isOpenAI ? 'text-purple-300' : 'text-slate-100'}">
                     ${MODEL_LABELS[model] || model}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${(data.avg_mrr || 0).toFixed(3)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${(data['avg_ndcg@5'] || 0).toFixed(3)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${(data['avg_ndcg@10'] || 0).toFixed(3)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${(data['avg_precision@5'] || 0).toFixed(3)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${(data['avg_precision@10'] || 0).toFixed(3)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-700">${Math.round(data.avg_search_time_ms || 0)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${(data.avg_mrr || 0).toFixed(3)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${(data['avg_ndcg@5'] || 0).toFixed(3)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${(data['avg_ndcg@10'] || 0).toFixed(3)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${(data['avg_precision@5'] || 0).toFixed(3)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${(data['avg_precision@10'] || 0).toFixed(3)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-slate-300">${Math.round(data.avg_search_time_ms || 0)}</td>
             </tr>
         `;
     }).join('');

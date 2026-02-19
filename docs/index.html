@@ -43,10 +43,10 @@
             @apply px-6 py-3 font-medium text-sm rounded-t-lg transition-all duration-200 mr-2;
         }
         .tab-btn.active {
-            @apply bg-slate-800 text-blue-400 border-2 border-blue-500 border-b-0 shadow-lg;
+            @apply bg-slate-900 text-blue-300 border-2 border-blue-400 border-b-0 shadow-lg shadow-blue-500/20;
         }
         .tab-btn:not(.active) {
-            @apply bg-slate-700 text-slate-400 hover:bg-slate-600 border border-slate-600 hover:text-slate-200;
+            @apply bg-slate-800 text-slate-400 hover:bg-slate-700 border border-slate-600 hover:text-slate-200;
         }
         .tab-content {
             display: none;
@@ -84,7 +84,7 @@
 </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
+    <header class="bg-gradient-to-r from-blue-800 to-purple-800 text-white py-8">
         <div class="container mx-auto px-4">
             <h1 class="text-3xl font-bold">arXiv RAG v1</h1>
             <p class="text-blue-100 mt-2">AI/ML Research Paper Search & Chat</p>
@@ -190,7 +190,7 @@
         <div id="papers-tab" class="tab-content">
             <!-- Chat Section (Top) -->
             <section class="chat-container mb-6">
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-lg">
+                <div class="bg-gradient-to-r from-blue-800 to-purple-800 text-white p-4 rounded-t-lg">
                     <h2 class="text-xl font-semibold">Chat with Research Papers</h2>
                     <p class="text-blue-100 text-sm">AI/ML 연구 논문에 대해 질문하세요</p>
                 </div>
